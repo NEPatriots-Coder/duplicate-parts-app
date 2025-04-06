@@ -3,16 +3,67 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  right: auto;
-  bottom: auto;
-  marginRight: -50%;
   transform: translate(-50%, -50%);
   background: white;
   padding: 20px;
-  borderRadius: 10px;
-  boxShadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  border: 2px solid #000;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  width: 80%; /* Reduced from 95% */
+  max-width: 1200px; /* Reasonable max-width */
+  text-align: center;
 }
 
 .overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal h2 {
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 24px; /* Ensure readable text size */
+}
+
+/* Create a container for the image to control its dimensions */
+.image-container {
+  width: 100%;
+  max-width: 1000px; /* Control maximum width */
+  margin: 0 auto 20px;
+  overflow: hidden; /* Ensure content doesn't spill out */
+}
+
+.modal-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.button-container button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button-container button:hover {
+  background-color: #0056b3;
 }

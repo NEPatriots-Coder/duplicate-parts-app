@@ -1,8 +1,9 @@
 // src/components/SheetSelectorModal.js
 import React from 'react';
 import Modal from 'react-modal';
+import './SheetSelectorModal.css'; // Import the CSS file
 
-Modal.setAppElement('#root'); // Make sure to set the app element for accessibility
+Modal.setAppElement('#root'); // Correct placement and import
 
 const SheetSelectorModal = ({ isOpen, onClose, onSelect }) => {
   return (
@@ -14,9 +15,12 @@ const SheetSelectorModal = ({ isOpen, onClose, onSelect }) => {
       overlayClassName="overlay"
     >
       <h2>Choose Which Sheet you would like to view!</h2>
-      <button onClick={() => onSelect('Duplicate Parts')}>Duplicate Parts</button>
-      <button onClick={() => onSelect('Part Variances')}>Part Variances</button>
-      <button onClick={() => onSelect('Planner Variances')}>Planner Variances</button>
+      <img src="dashboard_image.jpg" alt="Description of image" className="modal-image" />
+      <div className="button-container">
+        <button onClick={() => onSelect('Duplicate Parts')}>Duplicate Parts</button>
+        <button onClick={() => onSelect('Part Variances')}>Part Variances</button>
+        <button onClick={() => onSelect('Planner Variances')}>Planner Variances</button>
+      </div>
     </Modal>
   );
 };
