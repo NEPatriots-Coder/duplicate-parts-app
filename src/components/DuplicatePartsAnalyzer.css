@@ -1,0 +1,122 @@
+.container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.subtitle {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.filter-section {
+  background-color: #f5f5f5;
+  padding: 16px;
+  margin-bottom: 16px;
+  border-radius: 4px;
+}
+
+.filter-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .filter-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.filter-item {
+  margin-bottom: 8px;
+}
+
+.filter-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.filter-input {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-top: 4px;
+}
+
+.summary-section {
+  margin-bottom: 16px;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  border: 1px solid #ddd;
+}
+
+.data-table th,
+.data-table td {
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+}
+
+.data-table th {
+  background-color: #f5f5f5;
+  text-align: left;
+}
+
+.data-table tr:hover {
+  background-color: #f9f9f9;
+}
+
+.matrix-table {
+  min-width: 100%;
+  border-collapse: collapse;
+}
+
+.matrix-table th,
+.matrix-table td {
+  padding: 4px 8px;
+  border: none;
+}
+
+.matrix-table th {
+  text-align: left;
+  font-weight: normal;
+  color: #666;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.loading {
+  padding: 16px;
+}
+
+.error {
+  padding: 16px;
+  color: #d32f2f;
+}
+
+.no-results {
+  padding: 16px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+}

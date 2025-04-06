@@ -1,23 +1,19 @@
-import logo from './logo.svg';
+import React from 'react';
+import DuplicatePartsAnalyzer from './components/DuplicatePartsAnalyzer';
+import PartVarianceMatrix from './components/PartVarianceMatrix'; // Import the new component
 import './App.css';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h1>Parts Inventory Analysis</h1>
+        <p>Analyze duplicate parts and variance data across locations.</p> {/* New header information */}
       </header>
+      <main>
+        <DuplicatePartsAnalyzer />
+        <PartVarianceMatrix /> {/* Add the new component */}
+      </main>
     </div>
   );
 }
