@@ -168,7 +168,10 @@ const DuplicatePartsAnalyzer = () => {
 
   return (
     <div className="container">
-      <h1 className="title">Duplicate Parts Analyzer</h1>
+      <div className="image-container">
+        <img src="dashboard_image.jpg" alt="Logo" className="upper-right-image" />
+      </div>
+      <h1 className="title">Duplicate Parts at All Branches</h1>
 
       <div className="filter-section">
         <h2 className="subtitle">Filters</h2>

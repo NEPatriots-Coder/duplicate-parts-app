@@ -2,6 +2,23 @@
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
+  position: relative; /* Keep this to make the container a positioning context */
+}
+
+.image-container {
+  position: absolute; /* Position the container relative to the .container */
+  top: -250px; /* Move to the top - adjust as needed */
+  left: 50%; /* Keep horizontal centering */
+  transform: translateX(-50%); /* Adjust only horizontally */
+  width: auto; /* Remove fixed width */
+  height: auto;
+}
+
+.upper-right-image {
+  width: 350px; /* Adjust width as needed - start with a smaller size */
+  height: auto; /* Maintain aspect ratio */
+  display: block; /* Make sure the image is a block element */
+  margin: 0 auto; /* Center the image horizontally within its container */
 }
 
 .title {

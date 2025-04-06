@@ -161,16 +161,13 @@ const PartVarianceMatrix = () => {
           <table className="data-table">
             <thead>
               <tr>
-                <th className="px-4 py-2 border" onClick={() => handleSort('Part')}>
-                  Part Number {sortConfig.key === 'Part' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}
-                </th>
-                {uniqueLocations.map((location) => (
+                {Object.keys(data[0]).map((key) => (
                   <th
-                    key={location}
+                    key={key}
                     className="px-4 py-2 border"
-                    onClick={() => handleSort(location)}
+                    onClick={() => handleSort(key)}
                   >
-                    {location} {sortConfig.key === location ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}
+                    {key} {sortConfig.key === key ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}
                   </th>
                 ))}
               </tr>
@@ -178,10 +175,9 @@ const PartVarianceMatrix = () => {
             <tbody>
               {filteredData.map((row, idx) => (
                 <tr key={idx}>
-                  <td className="px-4 py-2 border">{row.Part}</td>
-                  {uniqueLocations.map((location) => (
-                    <td key={location} className="px-4 py-2 border text-right">
-                      {row[location] !== undefined ? row[location] : '-'}
+                  {Object.keys(row).map((key) => (
+                    <td key={key} className="px-4 py-2 border text-right">
+                      {row[key] !== undefined ? row[key] : '-'}
                     </td>
                   ))}
                 </tr>
