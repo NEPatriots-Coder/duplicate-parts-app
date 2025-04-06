@@ -14,7 +14,7 @@ const SheetSelectorModal = ({ isOpen, onClose, onSelect }) => {
       className="modal"
       overlayClassName="overlay"
     >
-      <h2>Choose Which Sheet you would like to view!</h2>
+      <h2>Choose which sheet of data you would like to view </h2>
       <img src="dashboard_image.jpg" alt="Description of image" className="modal-image" />
       <div className="button-container">
         <button onClick={() => onSelect('Duplicate Parts')}>Duplicate Parts</button>
