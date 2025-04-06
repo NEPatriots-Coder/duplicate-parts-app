@@ -1,24 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import Papa from 'papaparse';
-import './PartVarianceMatrix.css';
+import './PlannerVarianceMatrix.css';
 
-const PartVarianceMatrix = () => {
+const PlannerVarianceMatrix = () => {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filters, setFilters] = useState({
+    planner: '',
+    variance: '',
     partNumber: '',
-    location: '',
   });
-  const [uniqueLocations, setUniqueLocations] = useState([]);
-  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' }); // State for sorting
+  const [uniqueVariances, setUniqueVariances] = useState([]);
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
 
   useEffect(() => {
     const loadData = async () => {
       try {
         setLoading(true);
-        const response = await fetch('/PartVarianceMatrix.csv');
+        const response = await fetch('/NewSummary.csv');
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -33,8 +34,8 @@ const PartVarianceMatrix = () => {
               setData(results.data);
               setFilteredData(results.data);
 
-              const locationFields = results.meta.fields.filter((field) => field !== 'Part');
-              setUniqueLocations(locationFields);
+              const varianceFields = results.meta.fields.filter((field) => field !== 'Planner' && field !== 'Part number');
+              setUniqueVariances(varianceFields);
             } else {
               setError('No data found in the CSV file');
             }
@@ -66,16 +67,22 @@ const PartVarianceMatrix = () => {
     const applyFilters = () => {
       let filtered = [...data];
 
-     if (filters.partNumber) {
-      filtered = filtered.filter((item) =>
-      typeof item.Part === 'string' && item.Part.toLowerCase().includes(filters.partNumber.toLowerCase())
-  );
-}
+      if (filters.partNumber) {
+        filtered = filtered.filter((item) =>
+          typeof item['Part number'] === 'string' && item['Part number'].toLowerCase().includes(filters.partNumber.toLowerCase())
+        );
+      }
 
-      if (filters.location) {
+      if (filters.planner) {
+        filtered = filtered.filter((item) =>
+          typeof item.Planner === 'string' && item.Planner.toLowerCase().includes(filters.planner.toLowerCase())
+        );
+      }
+
+      if (filters.variance) {
         filtered = filtered.filter((item) => {
-          const locationValue = parseFloat(item[filters.location]);
-          return !isNaN(locationValue) && locationValue !== 0;
+          const varianceValue = parseFloat(item[filters.variance]);
+          return !isNaN(varianceValue) && varianceValue !== 0;
         });
       }
 
@@ -111,11 +118,42 @@ const PartVarianceMatrix = () => {
 
   return (
     <div className="container">
-      <h1 className="title">Part Variance Matrix Viewer</h1>
+      <h1 className="title">Planner Variance Matrix Viewer</h1>
 
       <div className="filter-section">
         <h2 className="subtitle">Filters</h2>
         <div className="filter-grid">
+          <div className="filter-item">
+            <label className="filter-label">
+              Planner
+              <input
+                type="text"
+                name="planner"
+                value={filters.planner}
+                onChange={handleFilterChange}
+                className="filter-input"
+                placeholder="Filter by planner"
+              />
+            </label>
+          </div>
+          <div className="filter-item">
+            <label className="filter-label">
+              Variance
+              <select
+                name="variance"
+                value={filters.variance}
+                onChange={handleFilterChange}
+                className="filter-input"
+              >
+                <option value="">All Variances</option>
+                {uniqueVariances.map((variance) => (
+                  <option key={variance} value={variance}>
+                    {variance}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
           <div className="filter-item">
             <label className="filter-label">
               Part Number
@@ -127,24 +165,6 @@ const PartVarianceMatrix = () => {
                 className="filter-input"
                 placeholder="Filter by part number"
               />
-            </label>
-          </div>
-          <div className="filter-item">
-            <label className="filter-label">
-              Location
-              <select
-                name="location"
-                value={filters.location}
-                onChange={handleFilterChange}
-                className="filter-input"
-              >
-                <option value="">All Locations</option>
-                {uniqueLocations.map((location) => (
-                  <option key={location} value={location}>
-                    {location}
-                  </option>
-                ))}
-              </select>
             </label>
           </div>
         </div>
@@ -192,4 +212,4 @@ const PartVarianceMatrix = () => {
   );
 };
 
-export default PartVarianceMatrix;
+export default PlannerVarianceMatrix;

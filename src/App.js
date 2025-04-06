@@ -1,6 +1,7 @@
 import React from 'react';
 import DuplicatePartsAnalyzer from './components/DuplicatePartsAnalyzer';
 import PartVarianceMatrix from './components/PartVarianceMatrix'; // Import the new component
+import PlannerVarianceMatrix from './components/PlannerVarianceMatrix';
 import './App.css';
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
       <main>
         <DuplicatePartsAnalyzer />
         <PartVarianceMatrix /> {/* Add the new component */}
+          <PlannerVarianceMatrix />
       </main>
     </div>
   );
