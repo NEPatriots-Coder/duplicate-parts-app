@@ -18,39 +18,24 @@ const DuplicatePartsAnalyzer = () => {
     const loadData = async () => {
       try {
         setLoading(true);
-        console.log('Attempting to fetch CSV file...');
-        // Use fetch instead of window.fs for standard React app
         const response = await fetch('/NewSummary.csv');
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const csvFile = await response.text();
-        console.log('CSV file loaded, first 200 characters:', csvFile.substring(0, 200));
 
         Papa.parse(csvFile, {
           header: true,
           dynamicTyping: true,
           skipEmptyLines: true,
           complete: (results) => {
-            console.log('Papa Parse results:', results);
-            console.log('Headers:', results.meta.fields);
-            console.log('First row data:', results.data[0]);
-            console.log('Total rows:', results.data.length);
-
             if (results.data && results.data.length > 0) {
               setData(results.data);
 
-              // Extract all unique locations - which is the "Branch" field
               const locationField = 'Branch';
-
-              console.log('Using location field:', locationField);
-
               const locations = [...new Set(results.data.map(item => item[locationField]))].filter(Boolean);
-
-              console.log('Unique locations found:', locations);
               setUniqueLocations(locations);
 
-              // Find duplicates
               findDuplicates(results.data, results.meta.fields);
             } else {
               setError('No data found in the CSV file');
@@ -72,58 +57,31 @@ const DuplicatePartsAnalyzer = () => {
   }, []);
 
   const findDuplicates = (data, fields) => {
-    console.log('Finding duplicates in data with fields:', fields);
-
-    // Based on the error message, we know we have a field called "Part"
     const partNumberField = 'Part';
-
-    console.log('Using part number field:', partNumberField);
-
-    // Group by part number using the identified field
     const groupedByPart = _.groupBy(data, partNumberField);
 
-    // Based on the error message, we know we have a field called "Branch" for location
-    // and fields like "StartCount", "EndCount", and "Difference" for counts
     const locationField = 'Branch';
     const differenceField = 'Difference';
 
-    console.log('Using location field:', locationField);
-    console.log('Using difference field for count:', differenceField);
-
-    // Filter for parts that appear in multiple locations
     const duplicateParts = Object.entries(groupedByPart)
       .filter(([_, items]) => items.length > 1)
       .map(([partNumber, items]) => {
-        console.log(`Processing part ${partNumber} with ${items.length} occurrences`);
-
-                  // Get the start and end count fields
         const startCountField = fields.find(f => f === 'StartCount' || f.includes('Start'));
         const endCountField = fields.find(f => f === 'EndCount' || f.includes('End'));
         const differenceField = fields.find(f => f === 'Difference' || f.includes('Diff'));
 
-        console.log('StartCount field:', startCountField);
-        console.log('EndCount field:', endCountField);
-        console.log('Difference field:', differenceField);
-
-        // Based on the error message, we have these fields available:
-        // Date, Part, Description, Branch, StartCount, EndCount, Difference, Variance, Planner
-
-        // Calculate statistics based on what fields we have
         const counts = items.map(item => ({
-          location: item['Branch'] || '',  // Using Branch as location
+          location: item['Branch'] || '',
           description: item['Description'] || '',
           count: differenceField ? item[differenceField] || 0 : 0,
           startCount: startCountField ? item[startCountField] || 0 : 0,
           endCount: endCountField ? item[endCountField] || 0 : 0,
         }));
 
-        // Calculate variance and other stats
         const values = counts.map(c => c.count);
         const mean = values.reduce((sum, val) => sum + val, 0) / values.length;
         const variance = values.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / values.length;
 
-        // Calculate coefficient of variation (CV) as a percentage
-        // CV = (standard deviation / |mean|) * 100
         const stdDev = Math.sqrt(variance);
         const coefficientOfVariation = mean !== 0 ? (stdDev / Math.abs(mean)) * 100 : 0;
 
@@ -169,7 +127,7 @@ const DuplicatePartsAnalyzer = () => {
   return (
     <div className="container">
       <div className="image-container">
-        <img src="dashboard_image.jpg" alt="Logo" className="upper-right-image" />
+        <img src="/dashboard_image.jpg" alt="Logo" className="upper-right-image" />
       </div>
       <h1 className="title">Duplicate Parts at All Branches</h1>
 
@@ -244,14 +202,12 @@ const DuplicatePartsAnalyzer = () => {
                       </thead>
                       <tbody>
                         {duplicate.counts.map((count, idx) => {
-                          // Calculate variance from average for this count
                           const avgCount = duplicate.mean;
                           const countVariance = count.count - avgCount;
                           const countVariancePercent = avgCount !== 0
                             ? ((countVariance / Math.abs(avgCount)) * 100).toFixed(2)
                             : "0.00";
 
-                          // Determine color based on variance
                           const varianceStyle = {
                             color: countVariance > 0 ? 'green' : countVariance < 0 ? 'red' : 'black'
                           };

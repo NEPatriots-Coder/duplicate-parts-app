@@ -1,144 +1,23 @@
-.container {
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-  position: relative; /* Keep this to make the container a positioning context */
-}
-
-.image-container {
-  position: absolute; /* Position the container relative to the .container */
-  top: -350px; /* Move to the top - adjust as needed */
-  left: 50%; /* Keep horizontal centering */
-  transform: translateX(-50%); /* Adjust only horizontally */
-  width: 1200px; /* Remove fixed width */
-  height: auto;
-}
-
-.upper-right-image {
+.upper-left-image {
   position: absolute;
   top: 10px;
   left: 10px;
-  right: 10px;
-  width: 500px; /* Adjust width as needed - start with a smaller size */
+  width: 50px; /* Adjust width as needed */
   height: auto; /* Maintain aspect ratio */
-  display: block; /* Make sure the image is a block element */
-  margin: 0 auto; /* Center the image horizontally within its container */
 }
 
-.title {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 16px;
-}
-
-.subtitle {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 8px;
-}
-
-.filter-section {
-  background-color: lightskyblue;
-  padding: 16px;
-  margin-bottom: 16px;
-  border-radius: 4px;
-}
-
-.filter-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
-}
-
-@media (min-width: 768px) {
-  .filter-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-.filter-item {
-  margin-bottom: 8px;
-}
-
-.filter-label {
-  display: block;
-  font-size: 14px;
-  font-weight: 500;
-  margin-bottom: 4px;
-}
-
-.filter-input {
-  display: block;
-  width: 100%;
-  padding: 8px 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-top: 4px;
-}
-
-.summary-section {
-  margin-bottom: 16px;
-   background-color: lightskyblue;
-}
-
-.table-container {
-  overflow-x: auto;
-}
-
-.data-table {
-  width: 100%;
-  border-collapse: collapse;
-  background-color: #fff;
-  border: 1px solid #ddd;
-}
-
-.data-table th,
-.data-table td {
-  padding: 8px 16px;
-  border: 1px solid #ddd;
-}
-
-.data-table th {
-  background-color: lightskyblue;
-  text-align: left;
-}
-
-.data-table tr:hover {
-  background-color: #f9f9f9;
-}
-
-.matrix-table {
-  min-width: 100%;
-  border-collapse: collapse;
-}
-
-.matrix-table th,
-.matrix-table td {
-  padding: 4px 8px;
+.back-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 10px 20px;
+  background-color: #007BFF;
+  color: white;
   border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-.matrix-table th {
-  text-align: left;
-  font-weight: normal;
-  color: #666;
-}
-
-.text-right {
-  text-align: right;
-}
-
-.loading {
-  padding: 16px;
-}
-
-.error {
-  padding: 16px;
-  color: #d32f2f;
-}
-
-.no-results {
-  padding: 16px;
-  background-color: #f5f5f5;
-  border-radius: 4px;
+.back-button:hover {
+  background-color: #0056b3;
 }
