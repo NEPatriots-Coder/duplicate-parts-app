@@ -58,43 +58,54 @@ const DuplicatePartsAnalyzer = () => {
 
   const findDuplicates = (data, fields) => {
     const partNumberField = 'Part';
+    const locationField = 'Branch';
     const groupedByPart = _.groupBy(data, partNumberField);
 
-    const locationField = 'Branch';
+    const startCountField = 'StartCount';
+    const endCountField = 'EndCount';
     const differenceField = 'Difference';
+    const varianceField = 'Variance'; // represents percent change
+
+    const safeParse = (val, label = '') => {
+      const num = parseFloat(val);
+      if (isNaN(num)) console.warn(`Non-numeric ${label}:`, val);
+      return isNaN(num) ? 0 : num;
+    };
 
     const duplicateParts = Object.entries(groupedByPart)
       .filter(([_, items]) => items.length > 1)
       .map(([partNumber, items]) => {
-        const startCountField = fields.find(f => f === 'StartCount' || f.includes('Start'));
-        const endCountField = fields.find(f => f === 'EndCount' || f.includes('End'));
-        const differenceField = fields.find(f => f === 'Difference' || f.includes('Diff'));
+        const counts = items.map(item => {
+          const start = safeParse(item[startCountField], 'StartCount');
+          const end = safeParse(item[endCountField], 'EndCount');
+          const diff = safeParse(item[differenceField], 'Difference');
+          const pctChange = safeParse(item[varianceField], 'Variance');
 
-        const counts = items.map(item => ({
-          location: item['Branch'] || '',
-          description: item['Description'] || '',
-          count: differenceField ? item[differenceField] || 0 : 0,
-          startCount: startCountField ? item[startCountField] || 0 : 0,
-          endCount: endCountField ? item[endCountField] || 0 : 0,
-        }));
+          return {
+            location: item[locationField] || '',
+            description: item['Description'] || '',
+            startCount: start,
+            endCount: end,
+            difference: diff,
+            percentChange: pctChange
+          };
+        });
 
-        const values = counts.map(c => c.count);
-        const mean = values.reduce((sum, val) => sum + val, 0) / values.length;
-        const variance = values.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / values.length;
-
+        const diffValues = counts.map(c => c.difference).filter(n => !isNaN(n));
+        const mean = diffValues.reduce((sum, val) => sum + val, 0) / diffValues.length;
+        const variance = diffValues.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / diffValues.length;
         const stdDev = Math.sqrt(variance);
-        const coefficientOfVariation = mean !== 0 ? (stdDev / Math.abs(mean)) * 100 : 0;
+        const range = Math.max(...diffValues) - Math.min(...diffValues);
 
         return {
           partNumber,
           items,
           counts,
-          mean,
-          variance,
-          coefficientOfVariation,
-          min: Math.min(...values),
-          max: Math.max(...values),
-          range: Math.max(...values) - Math.min(...values)
+          meanDifference: mean,
+          stdDeviation: stdDev,
+          range,
+          min: Math.min(...diffValues),
+          max: Math.max(...diffValues)
         };
       });
 
@@ -202,8 +213,8 @@ const DuplicatePartsAnalyzer = () => {
                       </thead>
                       <tbody>
                         {duplicate.counts.map((count, idx) => {
-                          const avgCount = duplicate.mean;
-                          const countVariance = count.count - avgCount;
+                          const avgCount = duplicate.meanDifference;
+                          const countVariance = count.difference - avgCount;
                           const countVariancePercent = avgCount !== 0
                             ? ((countVariance / Math.abs(avgCount)) * 100).toFixed(2)
                             : "0.00";
@@ -218,7 +229,7 @@ const DuplicatePartsAnalyzer = () => {
                               <td>{count.description}</td>
                               <td className="text-right">{count.startCount}</td>
                               <td className="text-right">{count.endCount}</td>
-                              <td className="text-right">{count.count}</td>
+                              <td className="text-right">{count.difference}</td>
                               <td className="text-right" style={varianceStyle}>
                                 {countVariancePercent}%
                               </td>
