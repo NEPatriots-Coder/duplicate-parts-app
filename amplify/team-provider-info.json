@@ -10,6 +10,14 @@
       "StackName": "amplify-duplicatepartsapp-dev-b8d0c",
       "StackId": "arn:aws:cloudformation:us-east-2:234997485892:stack/amplify-duplicatepartsapp-dev-b8d0c/435d8940-1345-11f0-b35b-0a0cd4c6bd0b",
       "AmplifyAppId": "d1f4tiza3hfjrb"
+    },
+    "categories": {
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d1f4tiza3hfjrb",
+          "type": "manual"
+        }
+      }
     }
   }
 }
