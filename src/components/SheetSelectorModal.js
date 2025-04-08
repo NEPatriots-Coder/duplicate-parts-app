@@ -19,7 +19,7 @@ const SheetSelectorModal = ({ isOpen, onClose, onSelect }) => {
       <div className="button-container">
         <button onClick={() => onSelect('Duplicate Parts')}>Duplicate Parts</button>
         <button onClick={() => onSelect('Part Variances')}>Part Variances</button>
-        <button onClick={() => onSelect('Planner Variances')}>Planner Variances</button>
+        <button onClick={() => onSelect('Planner Variances')}>Planner Counts</button>
       </div>
     </Modal>
   );

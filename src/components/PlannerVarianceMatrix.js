@@ -9,10 +9,8 @@ const PlannerVarianceMatrix = () => {
   const [error, setError] = useState(null);
   const [filters, setFilters] = useState({
     planner: '',
-    variance: '',
     partNumber: '',
   });
-  const [uniqueVariances, setUniqueVariances] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
 
   useEffect(() => {
@@ -33,9 +31,6 @@ const PlannerVarianceMatrix = () => {
             if (results.data && results.data.length > 0) {
               setData(results.data);
               setFilteredData(results.data);
-
-              const varianceFields = results.meta.fields.filter((field) => field !== 'Planner' && field !== 'Part number');
-              setUniqueVariances(varianceFields);
             } else {
               setError('No data found in the CSV file');
             }
@@ -79,13 +74,6 @@ const PlannerVarianceMatrix = () => {
         );
       }
 
-      if (filters.variance) {
-        filtered = filtered.filter((item) => {
-          const varianceValue = parseFloat(item[filters.variance]);
-          return !isNaN(varianceValue) && varianceValue !== 0;
-        });
-      }
-
       setFilteredData(filtered);
     };
 
@@ -118,7 +106,7 @@ const PlannerVarianceMatrix = () => {
 
   return (
     <div className="container">
-      <h1 className="title">Planner Variance Matrix Viewer</h1>
+      <h1 className="title">Planner Counts</h1>
 
       <div className="filter-section">
         <h2 className="subtitle">Filters</h2>
@@ -134,24 +122,6 @@ const PlannerVarianceMatrix = () => {
                 className="filter-input"
                 placeholder="Filter by planner"
               />
-            </label>
-          </div>
-          <div className="filter-item">
-            <label className="filter-label">
-              Variance
-              <select
-                name="variance"
-                value={filters.variance}
-                onChange={handleFilterChange}
-                className="filter-input"
-              >
-                <option value="">All Variances</option>
-                {uniqueVariances.map((variance) => (
-                  <option key={variance} value={variance}>
-                    {variance}
-                  </option>
-                ))}
-              </select>
             </label>
           </div>
           <div className="filter-item">
