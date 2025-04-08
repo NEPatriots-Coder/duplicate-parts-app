@@ -64,7 +64,6 @@ const DuplicatePartsAnalyzer = () => {
     const startCountField = 'StartCount';
     const endCountField = 'EndCount';
     const differenceField = 'Difference';
-    const varianceField = 'Variance'; // represents percent change
 
     const safeParse = (val, label = '') => {
       const num = parseFloat(val);
@@ -79,7 +78,9 @@ const DuplicatePartsAnalyzer = () => {
           const start = safeParse(item[startCountField], 'StartCount');
           const end = safeParse(item[endCountField], 'EndCount');
           const diff = safeParse(item[differenceField], 'Difference');
-          const pctChange = safeParse(item[varianceField], 'Variance');
+
+          // Calculate percent change
+          const percentChange = start !== 0 ? ((diff / start) * 100).toFixed(2) : "N/A";
 
           return {
             location: item[locationField] || '',
@@ -87,14 +88,12 @@ const DuplicatePartsAnalyzer = () => {
             startCount: start,
             endCount: end,
             difference: diff,
-            percentChange: pctChange
+            percentChange: percentChange
           };
         });
 
         const diffValues = counts.map(c => c.difference).filter(n => !isNaN(n));
         const mean = diffValues.reduce((sum, val) => sum + val, 0) / diffValues.length;
-        const variance = diffValues.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / diffValues.length;
-        const stdDev = Math.sqrt(variance);
         const range = Math.max(...diffValues) - Math.min(...diffValues);
 
         return {
@@ -102,7 +101,6 @@ const DuplicatePartsAnalyzer = () => {
           items,
           counts,
           meanDifference: mean,
-          stdDeviation: stdDev,
           range,
           min: Math.min(...diffValues),
           max: Math.max(...diffValues)
@@ -208,19 +206,13 @@ const DuplicatePartsAnalyzer = () => {
                           <th>Start</th>
                           <th>End</th>
                           <th>Difference</th>
-                          <th>Variance</th>
+                          <th>Percent Change</th>
                         </tr>
                       </thead>
                       <tbody>
                         {duplicate.counts.map((count, idx) => {
-                          const avgCount = duplicate.meanDifference;
-                          const countVariance = count.difference - avgCount;
-                          const countVariancePercent = avgCount !== 0
-                            ? ((countVariance / Math.abs(avgCount)) * 100).toFixed(2)
-                            : "0.00";
-
-                          const varianceStyle = {
-                            color: countVariance > 0 ? 'green' : countVariance < 0 ? 'red' : 'black'
+                          const percentChangeStyle = {
+                            color: parseFloat(count.percentChange) > 0 ? 'green' : parseFloat(count.percentChange) < 0 ? 'red' : 'black'
                           };
 
                           return (
@@ -230,8 +222,8 @@ const DuplicatePartsAnalyzer = () => {
                               <td className="text-right">{count.startCount}</td>
                               <td className="text-right">{count.endCount}</td>
                               <td className="text-right">{count.difference}</td>
-                              <td className="text-right" style={varianceStyle}>
-                                {countVariancePercent}%
+                              <td className="text-right" style={percentChangeStyle}>
+                                {count.percentChange}%
                               </td>
                             </tr>
                           );
