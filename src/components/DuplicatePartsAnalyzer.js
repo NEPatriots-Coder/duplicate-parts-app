@@ -18,7 +18,7 @@ const DuplicatePartsAnalyzer = () => {
     const loadData = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${process.env.PUBLIC_URL}/NewSummary.csv`);
+        const response = await fetch(`${process.env.PUBLIC_URL}/NewSummaryv2.csv`);
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
