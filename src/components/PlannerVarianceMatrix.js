@@ -19,7 +19,7 @@ const PlannerVarianceMatrix = () => {
     const loadData = async () => {
       try {
         setLoading(true);
-        const response = await fetch('PlannerPartAssignments.csv');
+        const response = await fetch('PlannerSummary_TotalRecords.csv');
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
